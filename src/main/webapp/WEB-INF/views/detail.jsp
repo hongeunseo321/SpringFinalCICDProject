@@ -20,6 +20,8 @@
 </head>
 <body>
 	<div class="container">
+		<h3 class="text-center" style="font-family: serif;">상세보기</h3>
+		<br>
 		<div class="row">
 			<table class="table">
 				<tr>
