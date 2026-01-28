@@ -4,7 +4,7 @@ pipeline {
     environment {
 	   DOCKER_USER = "hongeunseo"
 	   IMAGE_NAME = "${DOCKER_USER}/spring-app:latest"
-	   //CONTAINER_NAME = "spring-app"	
+	   CONTAINER_NAME = "spring-app"	
 	   COMPOSE_FILE = "docker-compose.yml"
 	}
 	
@@ -64,6 +64,17 @@ pipeline {
 				echo 'docker-compose down'
 				sh '''
 				   	docker-compose -f ${COMPOSE_FILE} down || trun
+				   '''
+			}
+		}
+		
+		stage('Docker Stop And RM') {
+			steps {
+				echo 'docker stop rm'
+				sh '''
+					docker stop ${CONTAINER_NAME} || true
+				    docker rm ${CONTAINER_NAME} || true
+				    docker pull ${IMAGE_NAME}
 				   '''
 			}
 		}
