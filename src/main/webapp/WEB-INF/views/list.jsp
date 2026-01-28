@@ -28,6 +28,7 @@ p {
 <body>
 	<div class="container">
 		<h3 class="text-center" style="font-family: serif;">맛집 목록</h3>
+		<br>
 		<div class="row">
 			<c:forEach var="vo" items="${list }">
 				<div class="col-md-3">
