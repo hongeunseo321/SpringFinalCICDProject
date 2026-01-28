@@ -3,7 +3,7 @@ pipeline {
 
     environment {
 	   IMAGE_NAME = "hongeunseo/spring-app:latest"
-	   CONTAINER_NAME = "spring-app"	
+	   //CONTAINER_NAME = "spring-app"	
 	}
 	
     stages {
