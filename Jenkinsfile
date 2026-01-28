@@ -2,8 +2,10 @@ pipeline {
     agent any
 
     environment {
-	   IMAGE_NAME = "hongeunseo/spring-app:latest"
+	   DOCKER_USER = "hongeunseo"
+	   IMAGE_NAME = "${DOCKER_USER}/spring-app:latest"
 	   //CONTAINER_NAME = "spring-app"	
+	   COMPOSE_FILE = "docker-compose.yml"
 	}
 	
     stages {
@@ -57,6 +59,24 @@ pipeline {
 			}
 		}
 		
+		stage('Docker Compose Down') {
+			steps {
+				echo 'docker-compose down'
+				sh '''
+				   	docker-compose -f ${COMPOSE_FILE} down || trun
+				   '''
+			}
+		}
+		
+		stage('Docker Compose UP') {
+			steps {
+				echo 'docker-compose up'
+				sh '''
+					docker-compose -f ${COMPOSE_FILE} up -d
+				   '''
+			}
+		}
+		/*
 		stage('Docker Run') {
 			steps {
 				echo 'Docker Run'
@@ -72,6 +92,7 @@ pipeline {
 				   '''
 			}
 		}
+		*/
     }
     
     post {
