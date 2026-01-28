@@ -24,8 +24,7 @@
 			<table class="table">
 				<tr>
 					<td class="text-center" rowspan="9" width="30%"><img
-						src="${vo.poster}" style="width: 300px; height: 250px;">
-					</td>
+						src="${vo.poster}" style="width: 300px; height: 250px;"></td>
 					<td colspan="2">
 						<h3>
 							${vo.name}&nbsp;<span style="color: orange;">${vo.score}</span>
@@ -66,11 +65,9 @@
 					<td>${vo.content}</td>
 				</tr>
 				<tr>
-					<td class="text-right"><a href="#"
-						class="btn btn-xs btn-primary">찜하기</a> <a href="#"
-						class="btn btn-xs btn-info">예약하기</a> <a
-						href="javascript:history.back()" class="btn btn-xs btn-warning">목록</a>
-					</td>
+					<td class="text-right"><a href="/find"
+						class="btn btn-xs btn-info">맛집 검색</a> <a
+						href="javascript:history.back()" class="btn btn-xs btn-warning">목록</a></td>
 				</tr>
 			</table>
 		</div>
