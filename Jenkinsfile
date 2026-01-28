@@ -2,13 +2,14 @@ pipeline {
     agent any
 
     environment {
-	   DOCKER_USER = "hongeunseo"
-	   IMAGE_NAME = "${DOCKER_USER}/spring-app:latest"
-	   CONTAINER_NAME = "spring-app"	
-	   COMPOSE_FILE = "docker-compose.yml"
+	   DOCKER_IMAGE = "hongeunseo/awscicd-app"
+	   DOCKER_TAG = "latest"
+	   EC2_HOST = "ip"
+	   EC2_USER = "ubuntu"
 	}
 	
     stages {
+		// GIT 주소 연결
         stage('Checkout') {
             steps {
                 echo 'Git Checkout'
@@ -16,6 +17,7 @@ pipeline {
             }
         }
         
+        // 배포판 만들기
         stage('Gradlew Build') {
 			steps {
 				echo 'Gradle Build'
@@ -30,7 +32,7 @@ pipeline {
 			steps {
 				echo 'Docker Image Build'
 				sh '''
-				    docker build -t ${IMAGE_NAME} .
+				    docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
 				   '''
 			}
 		}
@@ -44,21 +46,29 @@ pipeline {
 					passwordVariable: 'DOCKER_PW'
 				)]) {
 					sh '''
-						echo $DOCKER_PW | docker login -u $DOCKER_ID --password-stdin
+						echo "DOCKER_ID=$DOCKER_ID, DOCKER_PW=$DOCKER_PW"
+						echo "$DOCKER_PW" | docker login -u "$DOCKER_ID" --password-stdin
+						docker push ${DOCKER_IMAGE}:${DOCKER_TAG}
 					   '''
 				}
 			}
 		}
 		
-		stage('DockerHub Push') {
+		stage('Deploy to EC2') {
 			steps {
-				echo 'Docker Hub Push'
-				sh '''
-					docker push ${IMAGE_NAME}
-				   '''
+				echo 'Deploy to EC2'
+				sh """
+					ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << EOF
+					docker stop awscicd || true
+					docker rm awscicd || true
+					docker pull ${DOCKER_IMAGE}:${DOCKER_TAG}
+					docker run --name awscicd -it -d -p 9090:9090 ${DOCKER_IMAGE}:${DOCKER_TAG}
+					EOF
+				   """
 			}
 		}
 		
+		/*
 		stage('Docker Compose Down') {
 			steps {
 				echo 'docker-compose down'
@@ -87,6 +97,7 @@ pipeline {
 				   '''
 			}
 		}
+		*/
 		/*
 		stage('Docker Run') {
 			steps {
@@ -108,10 +119,10 @@ pipeline {
     
     post {
 		success {
-			echo 'Docker 실행 성공'
+			echo 'CI/CD 실행 성공'
 		}
 		failure {
-			echo 'Docker 실행 실패'
+			echo 'CI/CD 실행 실패'
 		}
 	}
 }
