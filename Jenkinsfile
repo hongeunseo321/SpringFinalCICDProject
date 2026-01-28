@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     environment {
-	   DOCKER_USER = 'hongeunseo'
-	   IMAGE_NAME = '${DOCKER_USER}/spring-app:latest'
+	   IMAGE_NAME = 'hongeunseo/spring-app:latest'
 	   CONTAINER_NAME = 'spring-app'	
 	}
 	
