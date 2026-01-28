@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-	   IMAGE_NAME = 'hongeunseo/boot-app:latest'
-	   CONTAINER_NAME = 'boot-app'	
+	   IMAGE_NAME = 'hongeunseo/spring-app:latest'
+	   CONTAINER_NAME = 'spring-app'	
 	}
 	
     stages {
